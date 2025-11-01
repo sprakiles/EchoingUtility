@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "echoingutility",
+  "version": "1.0.0",
+  "name": "Echoing Utility",
+  "description": "Automated brewing utilities",
+  "authors": ["Sprakiles"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.sprakiles.echoingutility.EchoingUtility"
+    ],
+    "client": [
+      "com.sprakiles.echoingutility.EchoingUtilityClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.0",
+    "fabric-api": "*",
+    "minecraft": "~1.21.8",
+    "java": ">=21"
+  }
+}
