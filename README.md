@@ -145,7 +145,7 @@ Contributions are welcome! Feel free to:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](https://github.com/sprakiles/EchoingUtility/tree/main?tab=MIT-1-ov-file).
 
 ## 👤 Author
 
