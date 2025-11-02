@@ -3,8 +3,8 @@ package com.sprakiles.echoingutility;
 import com.sprakiles.echoingutility.item.CondensedCatalystItem;
 import com.sprakiles.echoingutility.item.ModItems;
 import com.sprakiles.echoingutility.item.ModItemGroup;
+import com.sprakiles.echoingutility.trade.VillagerTradeHandler;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -12,7 +12,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -28,15 +27,18 @@ public class EchoingUtility implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Initializing Echoing Utility");
 
+        // Register items and item groups
         ModItems.registerModItems();
         ModItemGroup.registerItemGroups();
 
-        // Register command to get the item
-        registerCommand();
+        // Register villager trades
+        VillagerTradeHandler.registerTrades();
 
+        // Register tick handler for Temporal Echo ability
         CondensedCatalystItem.registerTickHandlerIfNeeded();
         LOGGER.info("Temporal Echo tick handler registered");
 
+        // Death prevention handler (Void Anchor ability)
         ServerLivingEntityEvents.ALLOW_DEATH.register((LivingEntity entity, DamageSource source, float damageAmount) -> {
             if (!(entity instanceof ServerPlayerEntity player)) {
                 return true;
@@ -64,20 +66,5 @@ public class EchoingUtility implements ModInitializer {
         });
 
         LOGGER.info("Echoing Utility initialized successfully");
-    }
-
-    private void registerCommand() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(CommandManager.literal("getecho")
-                    .executes(context -> {
-                        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
-                        ItemStack stack = new ItemStack(ModItems.MODIFIED_AMETHYST_SHARD, 1);
-                        player.giveItemStack(stack);
-                        player.sendMessage(Text.literal("Given Modified Amethyst Shard!").formatted(Formatting.GREEN), false);
-                        LOGGER.info("Gave Modified Amethyst Shard to player: {}", player.getName().getString());
-                        return 1;
-                    })
-            );
-        });
     }
 }
